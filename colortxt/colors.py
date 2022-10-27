@@ -24,15 +24,20 @@ class BG:
     Cyan    = ";46"
     White   = ";47"
 class Style:
-    Default   = "0"
-    Bold      = "1"
-    Underline = "4"
-    Reverse   = "7"
+    Bold            = "1"
+    Dim             = "2"
+    Italics         = "3"
+    Underline       = "4"
+    Flash           = "5"   # not standard
+    ReverseColor    = "7"
+    Deleted         = "9"   # not standard
+    DualUnderline   = "21"  # not standard
+    Overline        = "53"  # not standard
 # @formatter:on
 
 
 def tint(text: str,
-         fg=None, bg=None, style=None):
+         *, fg=None, bg=None, style=None) -> str:
     with io.StringIO() as s:
         tintIO(s, text, fg, bg, style)
         return s.getvalue()
