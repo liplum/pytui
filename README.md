@@ -1,6 +1,7 @@
 <div align="center">
 
-# PyGCIL
+# PyGCLI
 
 #### *Graphic command line interface in Python.*
+
 </div>
