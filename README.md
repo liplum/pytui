@@ -1,7 +1,7 @@
 <div align="center">
 
-# PyGCLI
+# pytui
 
-#### *Graphic command line interface in Python.*
+#### *Text User Interface in Python.*
 
 </div>
