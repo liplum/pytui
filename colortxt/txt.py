@@ -106,3 +106,20 @@ class Palette:
         for s in li:
             group.append(self.dye(mapping(s)))
         return StrGroup(group)
+
+    def __call__(self, *args, **kwargs) -> str | ColorStrLike:
+        """
+
+        :param args:
+        :param kwargs: type=Literal[str,Any]
+        :return:
+        """
+        if len(args) >= 1:
+            arg0 = args[0]
+            t = kwargs["type"] if "type" in kwargs else str
+            if t == str:
+                return self.tint(arg0)
+            else:
+                return self.dye(arg0)
+        else:
+            raise TypeError("only allow 1 positional arguments")
