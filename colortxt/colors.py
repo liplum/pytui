@@ -16,13 +16,19 @@ class FG:
     White       = ";37"
 
     LightBlack  = ";90"
-    Pink        = ";91"
+    Rose        = ";91"
     Emerald     = ";92"
     Gold        = ";93"
     Sky         = ";94"
     Magenta     = ";95"
     Azure       = ";96"
     LightWhite  = ";97"
+
+    All: list[str] = [
+        Black, Red, Green, Yellow, Blue, Violet, Cyan, White,
+        LightBlack, Rose, Emerald, Gold, Sky, Magenta, Azure, LightWhite,
+    ]
+
 class BG:
     Black       = ";40"
     Red         = ";41"
@@ -34,13 +40,18 @@ class BG:
     White       = ";47"
 
     LightBlack  = ";100"
-    Pink        = ";101"
+    Rose        = ";101"
     Emerald     = ";102"
     Gold        = ";103"
     Sky         = ";104"
     Magenta     = ";105"
     Azure       = ";106"
     LightWhite  = ";107"
+
+    All: list[str] = [
+        Black, Red, Green, Yellow, Blue, Violet, Cyan, White,
+        LightBlack, Rose, Emerald, Gold, Sky, Magenta, Azure, LightWhite,
+    ]
 class Style:
     Bold            = "1"
     Dim             = "2"
@@ -51,6 +62,10 @@ class Style:
     Deleted         = "9"   # not standard
     DualUnderline   = "21"  # not standard
     Overline        = "53"  # not standard
+    All: list[str] = [
+        Bold, Dim, Italics, Underline, Flash, ReverseColor, Deleted, DualUnderline,
+        Overline
+    ]
 # @formatter:on
 
 
