@@ -36,5 +36,8 @@ class Palette:
         self.bg = bg
         self.style = style
 
-    def tint(self, txt: str) -> ColorStr:
-        return ColorStr(txt, fg=self.fg, bg=self.bg, style=self.style)
+    def tint(self, txt) -> str:
+        return colors.tint(txt, fg=self.fg, bg=self.bg, style=self.style)
+
+    def dye(self, txt) -> ColorStr:
+        return ColorStr(str(txt), fg=self.fg, bg=self.bg, style=self.style)
