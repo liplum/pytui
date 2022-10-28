@@ -1,12 +1,24 @@
 from io import StringIO
-from typing import Callable, TypeVar
+from typing import Callable, TypeVar, Union, Protocol, runtime_checkable
 
 from . import colors
 
 T = TypeVar("T")
 
 
-class ColorStr:
+@runtime_checkable
+class ColorStrLike(Protocol):
+    def __len__(self) -> int:
+        pass
+
+    def __add__(self, other: Union[str, "ColorStrLike"]) -> "ColorStrLike":
+        pass
+
+    def get(self) -> str:
+        pass
+
+
+class ColorStr(ColorStrLike):
     def __init__(self, txt: str, *, fg=None, bg=None, style=None):
         self.txt = txt
         self.fg = fg
@@ -25,15 +37,15 @@ class ColorStr:
     def get(self) -> str:
         return colors.tint(self.txt, fg=self.fg, bg=self.bg, style=self.style)
 
-    def __add__(self, other: str | "ColorStr") -> "StrGroup":
+    def __add__(self, other: Union[str, ColorStrLike]) -> "StrGroup":
         return StrGroup([self, other])
 
     def __mul__(self, times: int) -> "ColorStr":
         return ColorStr(self.txt * times, fg=self.fg, bg=self.bg, style=self.style)
 
 
-class StrGroup:
-    def __init__(self, items: list[ColorStr | str] = None):
+class StrGroup(ColorStrLike):
+    def __init__(self, items: list[ColorStrLike | str] = None):
         if items is None:
             items = []
         self.items = items
@@ -44,19 +56,19 @@ class StrGroup:
             total += len(item)
         return total
 
-    def append(self, txt: ColorStr | str):
+    def append(self, txt: ColorStrLike | str):
         self.items.append(txt)
 
-    def add_head(self, txt: ColorStr | str):
+    def add_head(self, txt: ColorStrLike | str):
         self.items.insert(0, txt)
 
-    def insert(self, index: int, txt: ColorStr | str):
+    def insert(self, index: int, txt: ColorStrLike | str):
         self.items.insert(index, txt)
 
     def get(self) -> str:
         with StringIO() as s:
             for item in self.items:
-                if isinstance(item, ColorStr):
+                if isinstance(item, ColorStrLike):
                     s.write(item.get())
                 else:
                     s.write(item)
@@ -65,8 +77,8 @@ class StrGroup:
     def __str__(self):
         with StringIO() as s:
             for item in self.items:
-                if isinstance(item, ColorStr):
-                    s.write(item.txt)
+                if isinstance(item, ColorStrLike):
+                    s.write(str(item))
                 else:
                     s.write(item)
             return s.getvalue()
