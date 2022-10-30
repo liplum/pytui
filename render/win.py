@@ -1,3 +1,4 @@
+from io import StringIO
 from typing import Iterator, Optional
 
 import numpy as np
@@ -5,7 +6,7 @@ import win32con
 import win32console
 from win32console import PyConsoleScreenBufferType, PyCOORDType
 
-from .canvas import Renderer, Canvas
+from .canvas import Renderer, Canvas, FG, BG
 
 """
 |---x--------->
@@ -73,12 +74,23 @@ class WinCanvas(Canvas):
     def shouldRerender(self) -> bool:
         return self.dirty
 
+    def composeCharsToRender(self) -> str:
+        char = self.char
+        sizeX = self.sizeX
+        sizeY = self.sizeY
+        with StringIO() as s:
+            for y in range(sizeY):
+                for x in range(sizeX):
+                    s.write(char[x * sizeY + y])
+            return s.getvalue()
+
     def iterAttributes(self) -> Iterator[int]:
         fg = self.fg
         bg = self.bg
+        sizeX = self.sizeX
         sizeY = self.sizeY
-        for x in range(self.sizeX):
-            for y in range(sizeY):
+        for y in range(sizeY):
+            for x in range(sizeX):
                 pos = x * sizeY + y
                 yield mix_color(fg[pos], bg[pos])
 
@@ -100,7 +112,7 @@ class WinRender(Renderer):
         if isinstance(canvas, WinCanvas):
             buf = self.buffer
             buf.WriteConsoleOutputCharacter(
-                canvas.char, PyCOORDType(0, 0)
+                canvas.composeCharsToRender(), PyCOORDType(0, 0)
             )
             buf.WriteConsoleOutputAttribute(
                 canvas.iterAttributes(), PyCOORDType(0, 0)
@@ -118,7 +130,7 @@ class WinRender(Renderer):
         c = WinCanvas(width, height)
         c.char = np.full(width * height, " ", dtype=str)
         c.fg = np.full(width * height, 0, dtype=int)
-        c.bg = np.full(width * height, 0, dtype=int)
+        c.bg = np.full(width * height, mix_color(FG.White, BG.Black), dtype=int)
         return c
 
     def getCanvas(self) -> WinCanvas:
