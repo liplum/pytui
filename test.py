@@ -19,7 +19,7 @@ def test_renderer():
     canvas = renderer.getCanvas()
     start = datetime.now()
     x, y = 0, 0
-    tps = Timer.byFps(1)
+    tps = Timer.byFps(10)
     tps.reset()
     try:
         while (datetime.now() - start).seconds <= 10:
@@ -29,8 +29,7 @@ def test_renderer():
             y += 1
             if canvas.shouldRerender:
                 renderer.render(canvas)
-            time.sleep(0.16)
-            # tps.delay()
+            tps.delay()
     finally:
         renderer.dispose()
 

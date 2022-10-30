@@ -27,7 +27,7 @@ class Timer:
 
     def delay(self):
         duration = nowSec() - self.start_time
-        sleep_time = duration - self.interval
+        sleep_time = self.interval - duration
         if sleep_time > 0:
             sleep(sleep_time)
         self.reset()
@@ -35,4 +35,4 @@ class Timer:
     @property
     def isEnd(self) -> bool:
         duration = nowSec() - self.start_time
-        return duration - self.interval >= 0
+        return self.interval - duration >= 0
