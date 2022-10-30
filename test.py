@@ -1,5 +1,4 @@
 import platform
-import time
 
 sysinfo = platform.system()
 
@@ -22,8 +21,8 @@ def test_renderer():
     tps = Timer.byFps(10)
     tps.reset()
     try:
-        while (datetime.now() - start).seconds <= 10:
-            # canvas.setColor(x, y, bg=BG.White)
+        while (datetime.now() - start).seconds <= 3:
+            canvas.setColor(x, y, bg=BG.White)
             canvas.setChar(x, y, char="a")
             x += 1
             y += 1

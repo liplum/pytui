@@ -17,7 +17,7 @@ v 3 4 5 6 7 8 9
 """
 
 
-def mix_color(fg: int, bk: int) -> int: return fg | bk
+def mixColor(fg: int, bk: int) -> int: return fg | bk
 
 
 class WinCanvas(Canvas):
@@ -92,14 +92,14 @@ class WinCanvas(Canvas):
         for y in range(sizeY):
             for x in range(sizeX):
                 pos = x * sizeY + y
-                yield mix_color(fg[pos], bg[pos])
+                yield mixColor(fg[pos], bg[pos])
 
 
 class WinRender(Renderer):
     def __init__(self):
         super().__init__()
         self.buffer: Optional[PyConsoleScreenBufferType] = None
-        self.needRegen = True
+        self.needRegen = False
         self.last: Optional[WinCanvas] = None
 
     def initialize(self):
@@ -126,11 +126,11 @@ class WinRender(Renderer):
         buf.SetConsoleActiveScreenBuffer()
         info = buf.GetConsoleScreenBufferInfo()
         size = info["Size"]
-        width, height = size.X, size.Y
-        c = WinCanvas(width, height)
-        c.char = np.full(width * height, " ", dtype=str)
-        c.fg = np.full(width * height, 0, dtype=int)
-        c.bg = np.full(width * height, mix_color(FG.White, BG.Black), dtype=int)
+        sizeX, sizeY = size.X, size.Y
+        c = WinCanvas(sizeX, sizeY)
+        c.char = np.full(sizeX * sizeY, " ", dtype=str)
+        c.fg = np.full(sizeX * sizeY, 0, dtype=int)
+        c.bg = np.full(sizeX * sizeY, mixColor(FG.White, BG.Black), dtype=int)
         return c
 
     def getCanvas(self) -> WinCanvas:

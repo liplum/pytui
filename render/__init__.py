@@ -4,6 +4,7 @@ from .canvas import FG, BG
 system_type = platform.system()
 
 
+# noinspection DuplicatedCode
 def setupColors():
     if system_type == "Windows":
         from win32console import BACKGROUND_RED, BACKGROUND_BLUE, BACKGROUND_GREEN, FOREGROUND_BLUE, FOREGROUND_RED, \
@@ -53,3 +54,16 @@ def setupColors():
     FG.AllColors = [
         FG.Blue, FG.Green, FG.Yellow, FG.Red, FG.Cyan, FG.Violet, FG.White, FG.Black
     ]
+
+    if system_type == "Windows":
+        pass
+    else:
+        from .unix import toColorPair
+        import curses
+        curses.start_color()
+        for fg in FG.AllColors:
+            for bk in BG.AllColors:
+                pairID = toColorPair(bk, fg)
+                if pairID == 0:
+                    continue
+                curses.init_pair(pairID, fg, bk)
